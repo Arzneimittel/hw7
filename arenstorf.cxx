@@ -52,26 +52,23 @@ void norm_func(double* norm, double* x, double* y,double& max1, double& max2, do
   }
 }
 int main(void){
-  double k1[4],k2[4],k3[4],k4[4],k5[4],k6[4],k7[4],x[4],y[4],xold[4],yold[4],norm[4],max1,max2,MAX,dt,tol=1e-5;
+  double k1[4],k2[4],k3[4],k4[4],k5[4],k6[4],k7[4],x[4],y[4],xold[4],yold[4],norm[4],max1,max2,MAX,dt=1e-5,tol=1e-5;
   x[0]=0.994;x[1]=0.0;x[2]=0.0;x[3]=-2.00158510637908;
   y[0]=0.994;y[1]=0.0;y[2]=0.0;y[3]=-2.00158510637908;
   const double mu=0.012277471;
   double t=0.0,L=17.065216560157;
-  ofstream out ("kutta_dt_test.txt");
+  ofstream out ("kutta_über_dt_1e-5.txt");
   //const double c2=1.0/5.0, c3=3.0/10.0, c4=4.0/5.0, c5=8.0/9.0, c6=1.0, c7=1.0;
   out << t << "\t" << y[0]<< "\t" << y[1] << "\t" << 0 <<endl;
  while(t<L){
-  dt=1e-5;
-  for(int i=0;i<4;i++){xold[0]=x[0];xold[1]=x[1];xold[2]=x[2];xold[3]=x[3];}
-  for(int i=0;i<4;i++){yold[0]=y[0];yold[1]=x[1];yold[2]=x[2];yold[3]=x[3];}
+  for(int i=0;i<4;i++){yold[0]=y[0];yold[1]=y[1];yold[2]=y[2];yold[3]=y[3];}
   Kutta_5(k1,k2,k3,k4,k5,k6,k7,x,dt,mu);
   Kutta_4(k1,k2,k3,k4,k5,k6,k7,y,dt,mu);
   norm_func(norm,x,y,max1,max2,MAX);
-  for(int i=0;i<4;i++){x[0]=xold[0];x[1]=xold[1];x[2]=xold[2];x[3]=xold[3];}
-  for(int i=0;i<4;i++){y[0]=yold[0];y[1]=xold[1];y[2]=xold[2];y[3]=xold[3];}
+  for(int i=0;i<4;i++){y[0]=yold[0];y[1]=yold[1];y[2]=yold[2];y[3]=yold[3];}
   dt = dt * pow((tol/MAX),0.20);
-  Kutta_5(k1,k2,k3,k4,k5,k6,k7,x,dt,mu);
   Kutta_4(k1,k2,k3,k4,k5,k6,k7,y,dt,mu);
+  for(int i=0;i<4;i++){x[0]=y[0];x[1]=y[1];x[2]=y[2];x[3]=y[3];}
   t+=dt;
     out << t << "\t" << y[0]<< "\t" << y[1] <<"\t" << dt <<endl;
 }
